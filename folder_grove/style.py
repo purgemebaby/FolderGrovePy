@@ -2,6 +2,7 @@ from questionary import Style
 from rich.theme import Theme
 from rich.tree import Tree
 from rich.text import Text
+from rich.style import Style as richStyle
 
 ascii_art_text = f""" ____  _____  __    ____  ____  ____     ___  ____  _____  _  _  ____ 
 ( ___)(  _  )(  )  (  _ \\( ___)(  _ \\   / __)(  _ \\(  _  )( \\/ )( ___)
@@ -53,7 +54,7 @@ def rainbow_text(text):
     color_index = 0
 
     for char in text:
-        styled_text.append(char, style=Style(color=colors[color_index]))
+        styled_text.append(char, style=richStyle(color=colors[color_index]))
         color_index = (color_index + 1) % len(colors)
 
     return styled_text

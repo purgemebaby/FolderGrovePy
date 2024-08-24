@@ -7,6 +7,7 @@ import shutil
 import questionary
 from rich.console import Console
 from json import load as jsload
+from urllib.parse import quote
 
 clean_screen()
 
@@ -46,7 +47,7 @@ PRESETS = saved_presets(SAVING)
 
 # Additional functions for validating input
 def validate_folder_name(name):
-    """Linting the name of the project introduced by the user"""
+    """Parses the name of the project and checks if it's valid"""
     if len(name) <= 0: 
         return "Write a name"
     
@@ -60,7 +61,7 @@ def validate_folder_name(name):
     return True
 
 def validate_preset_name(preset):
-    """Linting the name of the preset to be saved"""
+    """Parses the name of the preset and checks if it's valid"""
     if len(preset) <= 0: 
         return "Write a name"
     
@@ -70,7 +71,7 @@ def validate_preset_name(preset):
     return True
 
 def validate_load(preset):
-    """Linting the name of the preset to be loaded"""
+    """Parses the name of the preset to be loaded and checks if it exists"""
     if not preset in PRESETS:
         return "Preset does not exist"
     
@@ -84,9 +85,8 @@ menu_choices = [
 "1. Create a new Project",
 "2. Save a Preset",
 "3. Load a Preset",
-"4. See Tree (Presets)",
-"5. See Tree (Projects)\n",
-"6. Clean Screen",
+"4. See Tree (Presets)\n",
+"5. Clean Screen",
 "0. Exit"
 ]
 
@@ -115,7 +115,7 @@ while True:
                 subfolder(CREATION, name_project, dir)
                 PROJECTS.append(name_project)
 
-                console.print(f"Project [link file://{CREATION}/{name_project} italic magenta]{name_project}[/] successfully created", style="success")
+                console.print(f"Project [link file://{CREATION}/{quote(name_project)} italic magenta]{name_project}[/] successfully created", style="success")
 
             case "2":
                 name_preset = questionary.text(
@@ -137,10 +137,10 @@ while True:
 
                 show_presets(SAVING)
 
-                preset = questionary.text(
-                    "Enter the name of the preset",
-                    style = custom_style_fancy, 
-                    instruction = "(Ctrl+c to cancel)\n> ",
+                preset = questionary.autocomplete(
+                    "Enter the name of the preset:",
+                    style = custom_style_fancy,
+                    choices=PRESETS,
                     validate = validate_load
                 ).unsafe_ask()
 
@@ -153,7 +153,7 @@ while True:
                 load(SAVING, CREATION, name, preset)
                 PROJECTS.append(name)
 
-                console.print(f"Preset [magenta]{preset}[/] successfully loaded in [link file://{CREATION}/{name} magenta italic]{name}[/].",style="success")
+                console.print(f"Preset [magenta]{preset}[/] successfully loaded in [link file://{CREATION}/{quote(name)} magenta italic]{name}[/].",style="success")
 
             case "4":
                 if not PRESETS:
@@ -162,10 +162,10 @@ while True:
 
                 show_presets(SAVING)
 
-                preset = questionary.text(
-                    "Enter the name of the preset",
-                    style = custom_style_fancy, 
-                    instruction = "(Ctrl+c to cancel)\n> ",
+                preset = questionary.autocomplete(
+                    "Enter the name of the preset:",
+                    style = custom_style_fancy,
+                    choices=PRESETS,
                     validate = validate_load
                 ).unsafe_ask()
 
@@ -179,28 +179,10 @@ while True:
 
                 console.print(tree)
                 pause("")
-
-            case "5":
-                if not PROJECTS:
-                    pause("There are no projects to be shown")
-
-                name_project = questionary.select(
-                    "Select a project",
-                    style = custom_style_fancy,
-                    instruction = "(Use arrow keys) (Ctrl+c to cancel)",
-                    choices = PROJECTS
-                ).unsafe_ask()
-
-                dir = f"{CREATION}/{name_project}"
-                tree = style_tree(dir)
-
-                walk_directory(dir, tree)
-                console.print(tree)
-                pause("")
             
-            case "6":
+            case "5":
                 clean_screen()
-                console.print(f"[bold white]{ascii_art_text}[/]")
+                console.print(rainbow_text(ascii_art_text))
 
     except KeyboardInterrupt:
         continue

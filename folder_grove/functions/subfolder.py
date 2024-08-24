@@ -53,12 +53,12 @@ def subfolder(path, name, dir):
                 subfolder(path, name, new_dir)
 
 def new_preset(name_preset, saving):
-    """Save the preset in a file"""
+    """Saves preset to a file"""
     result = []
     
     
     def save_paths(cd):
-        """Save the paths of the subfolders in a list"""
+        """Saves subfolder's paths in a list"""
         confirm = questionary.confirm(
             f"Do you want to save subfolders in {cd}?",
             default = False,
@@ -95,7 +95,7 @@ def new_preset(name_preset, saving):
         file.close()
 
 def load(save, create, name, preset):
-    """Load a preset in a directory specified by the user in the configuration file"""
+    """Creates folder and subfolders following preset pattern"""
     size = len(preset)+1
     
     new_dir = f"{create}/{name}"
@@ -110,7 +110,7 @@ def load(save, create, name, preset):
 
 
 def saved_presets(saving):
-    """Get the saved presets from a file and keep them in heap memory"""
+    """Gets saved presets from file and keeps them in heap memory"""
     with open(saving, "r") as file:
         options = []
         for line in file:
@@ -120,11 +120,11 @@ def saved_presets(saving):
     return options
 
 def show_presets(saving):
-    """Show the saved presets in heap memory"""
+    """Shows saved presets in heap memory"""
     presets = saved_presets(saving)
     console.print("Saved Presets:", style="bold #0f8994")
     
     for p in presets:
-        console.print(p, end="\t", style="bold #21dbc9")
+        console.print(p, end="    ", style="bold #21dbc9")
     print()
         
