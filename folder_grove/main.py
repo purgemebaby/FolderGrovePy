@@ -1,52 +1,50 @@
-from functions.subfolder import new_preset, subfolder, show_presets, saved_presets, load, get_subdirectories, walk_directory, FORBIDDEN
-from style import custom_style_fancy, rich_theme, style_tree
-from rich.console import Console
-from json import load as jsload
+from functions.subfolder import new_preset, subfolder, show_presets, saved_presets, load, FORBIDDEN
+from functions.others import get_subdirectories, walk_directory, clean_screen, pause
+from style import ascii_art_text, custom_style_fancy, rich_theme, style_tree, rainbow_text
+
 import os
 import shutil
 import questionary
+from rich.console import Console
+from json import load as jsload
+
+clean_screen()
 
 DPATH = os.path.join(os.path.dirname(__file__), "config/presets.txt")
 CONF = jsload(open(os.path.join(os.path.dirname(__file__), "config/config.json")))
 CREATION = CONF["creationPath"]
 SAVING = CONF["savingPath"]
 
+console = Console(theme=rich_theme)
+
+# Getting project creation path
 try:
     if CREATION == "pwd":
         CREATION = os.getcwd()
     elif not os.path.exists(CREATION):
         raise FileNotFoundError(f"Path '{CREATION}' does not exist, using working directory instead")
 except FileNotFoundError as e:
-    print(e)
+    console.print(e, style="error")
     CREATION = os.getcwd()
 
+# Getting presets file path
 try:
     if SAVING == "default":
         SAVING = DPATH
     elif not os.path.exists(SAVING):
         raise FileNotFoundError(f"Path '{SAVING}' does not exist, using default path instead")
 except FileNotFoundError as e:
-    print(e)
+    console.print(e, style="error")
     SAVING = DPATH
 
 if not os.path.exists(SAVING):
-    print("File 'presets.txt' does not exist, creating it...")
+    console.print("File 'presets.txt' does not exist. Creating file...", style="error")
     open(SAVING, "w").close()
-
 
 PROJECTS = get_subdirectories(CREATION)
 PRESETS = saved_presets(SAVING)
 
-console = Console(theme=rich_theme)
-
-# Additional functions for linting inputs
-def pause(error_msg):
-    """Pause the program and show an exception message"""
-    console.print(error_msg, style="error")
-    console.print("Press any key to continue...", end="", style="continue")
-    os.system("bash -c 'read -r -n 1 -s'")
-    os.system("clear")
-
+# Additional functions for validating input
 def validate_folder_name(name):
     """Linting the name of the project introduced by the user"""
     if len(name) <= 0: 
@@ -79,20 +77,27 @@ def validate_load(preset):
     return True
 
 # Menu
-os.system("clear")
+# console.print(f"[bold white]{ascii_art_text}[/]")
+console.print(rainbow_text(ascii_art_text))
+
+menu_choices = [
+"1. Create a new Project",
+"2. Save a Preset",
+"3. Load a Preset",
+"4. See Tree (Presets)",
+"5. See Tree (Projects)\n",
+"6. Clean Screen",
+"0. Exit"
+]
+
 while True:
     try:
         option = questionary.select(
             "Choose an option:",
             style = custom_style_fancy,
             instruction = "(Use arrow keys)",
-            choices = ["1. Create a new Project",
-                    "2. Save a Preset",
-                    "3. Load a Preset",
-                    "4. See Tree (Presets)",
-                    "5. See Tree (Projects)",
-                    "0. Salir"]
-        ).ask(kbi_msg="Program interrupted...")
+            choices = menu_choices
+        ).ask(kbi_msg="Program interrupted...") 
         
         if option == None or option[0] == "0": break
 
@@ -109,7 +114,8 @@ while True:
 
                 subfolder(CREATION, name_project, dir)
                 PROJECTS.append(name_project)
-                console.print(f"Project [magenta]{name_project}[/] successfully created", style="success")
+
+                console.print(f"Project [link file://{CREATION}/{name_project} italic magenta]{name_project}[/] successfully created", style="success")
 
             case "2":
                 name_preset = questionary.text(
@@ -121,6 +127,8 @@ while True:
 
                 new_preset(name_preset, SAVING)
                 PRESETS.append(name_preset)
+
+                console.print(f"Preset [magenta]{name_preset}[/] saved successfully", style="success")
 
             case "3":
                 if not PRESETS:
@@ -144,6 +152,7 @@ while True:
 
                 load(SAVING, CREATION, name, preset)
                 PROJECTS.append(name)
+
                 console.print(f"Preset [magenta]{preset}[/] successfully loaded in [link file://{CREATION}/{name} magenta italic]{name}[/].",style="success")
 
             case "4":
@@ -153,10 +162,6 @@ while True:
 
                 show_presets(SAVING)
 
-                name = ".tmp"
-                dir = f"{CREATION}/{name}"
-                tree = style_tree(dir)
-
                 preset = questionary.text(
                     "Enter the name of the preset",
                     style = custom_style_fancy, 
@@ -164,12 +169,16 @@ while True:
                     validate = validate_load
                 ).unsafe_ask()
 
+                name = preset
+                dir = f"{CREATION}/{name}"
+                tree = style_tree(dir)
+
                 load(SAVING, CREATION, name, preset)
                 walk_directory(dir, tree)
                 shutil.rmtree(dir)
 
                 console.print(tree)
-                pause("\n*Note: you can click on folders to open them!")
+                pause("")
 
             case "5":
                 if not PROJECTS:
@@ -178,7 +187,7 @@ while True:
                 name_project = questionary.select(
                     "Select a project",
                     style = custom_style_fancy,
-                    instruction = "(Use arrow keys)",
+                    instruction = "(Use arrow keys) (Ctrl+c to cancel)",
                     choices = PROJECTS
                 ).unsafe_ask()
 
@@ -187,7 +196,11 @@ while True:
 
                 walk_directory(dir, tree)
                 console.print(tree)
-                pause("\n*Note: you can click on folders to open them!")
+                pause("")
+            
+            case "6":
+                clean_screen()
+                console.print(f"[bold white]{ascii_art_text}[/]")
 
     except KeyboardInterrupt:
         continue

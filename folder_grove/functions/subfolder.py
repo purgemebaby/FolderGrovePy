@@ -1,9 +1,7 @@
 from style import custom_style_fancy, rich_theme
 from rich.console import Console
-from rich.tree import Tree
 import os
 import questionary
-import pathlib
 
 FORBIDDEN = ".;{}=*^%$#@!~`´|\\<>?¿¡/\"\'"
 console = Console(theme=rich_theme)
@@ -96,8 +94,6 @@ def new_preset(name_preset, saving):
         file.write("-" * 20 + "\n")
         file.close()
 
-    console.print(f"Preset [magenta]{name_preset}[/] saved successfully", style="success")
-
 def load(save, create, name, preset):
     """Load a preset in a directory specified by the user in the configuration file"""
     size = len(preset)+1
@@ -131,26 +127,4 @@ def show_presets(saving):
     for p in presets:
         console.print(p, end="\t", style="bold #21dbc9")
     print()
-
-
-def get_subdirectories(dir):
-    """Get the subdirectories of a directory"""
-    subdirectories = []
-
-    for item in os.listdir(dir):
-        subdirectories.append(item)
-
-    return subdirectories
-
-def walk_directory(dir: pathlib.Path, tree: Tree):
-    """Walk a directory and add it to a Tree"""
-    paths = sorted(pathlib.Path(dir).iterdir())
-    
-    for path in paths:
-        style = "dim" if path.name.startswith("__") else ""
-        branch = tree.add(
-            f"[bold magenta]:open_file_folder: [link file://{path}]{path.name}",
-            style = style,
-            guide_style = style,
-        )
         
