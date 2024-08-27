@@ -3,7 +3,7 @@ from rich.console import Console
 import os
 import questionary
 
-FORBIDDEN = ".;{}=*^%$#@!~`´|\\<>?¿¡/\"\'"
+FORBIDDEN = ".*#|\\<>?/\"\'"
 console = Console(theme=rich_theme)
 
 def validate_subfolders(subfolders):
@@ -14,16 +14,14 @@ def validate_subfolders(subfolders):
     for char in FORBIDDEN:
         if char in subfolders:
             return f"Subfolder name contains an invalid character ({char})"
-    
+
+    # Cannot have more comas than subfolders, that could lead to an error
     sub = list(filter(lambda x: x != '', subfolders.strip().split(',')))
     comas = subfolders.count(",")
 
-    # Cannot have more comas than subfolders, that could lead to an error
     if comas >= len(sub):
         return "Type another subfolder or delete the comma (,)"
-    
-    
-    
+        
     return True
 
 
@@ -138,5 +136,5 @@ def show_presets(saving):
     
     for p in presets:
         console.print(p, end="    ", style="bold #21dbc9")
-    print()
+    print("\n")
         

@@ -1,4 +1,4 @@
-from functions.subfolder import new_preset, subfolder, show_presets, saved_presets, load, FORBIDDEN
+from functions.subfolder import new_preset, subfolder, show_presets, saved_presets, load, remove_preset ,FORBIDDEN
 from functions.others import get_subdirectories, walk_directory, clean_screen, pause
 from style import ascii_art_text, custom_style_fancy, rich_theme, style_tree, rainbow_text
 
@@ -81,11 +81,12 @@ def validate_load(preset):
 console.print(rainbow_text(ascii_art_text))
 
 menu_choices = [
-"1. Create a new Project",
+"1. Create a New Project",
 "2. Save a Template",
 "3. Load a Template",
-"4. See Tree (Template)\n",
-"5. Clean Screen",
+"4. Remove a Template",
+"5. See Tree (Template)\n",
+"6. Clean Screen",
 "0. Exit"
 ]
 
@@ -115,7 +116,7 @@ while True:
                 subfolder(CREATION, name_project, dir)
                 PROJECTS.append(name_project)
 
-                console.print(f"Project [link file://{CREATION}/{quote(name_project)} italic magenta]{name_project}[/] successfully created", style="success")
+                console.print(f"Project [link file://{CREATION}/{quote(name_project)} italic magenta]{name_project}[/] successfully created\n", style="success")
 
             case "2":
                 name_preset = questionary.text(
@@ -128,7 +129,7 @@ while True:
                 new_preset(name_preset, SAVING)
                 PRESETS.append(name_preset)
 
-                console.print(f"Template [magenta]{name_preset}[/] saved successfully", style="success")
+                console.print(f"Template [magenta]{name_preset}[/] saved successfully\n", style="success")
 
             case "3":
                 if not PRESETS:
@@ -153,9 +154,28 @@ while True:
                 load(SAVING, CREATION, name, preset)
                 PROJECTS.append(name)
 
-                console.print(f"Template [magenta]{preset}[/] successfully loaded in [link file://{CREATION}/{quote(name)} magenta italic]{name}[/].",style="success")
+                console.print(f"Template [magenta]{preset}[/] successfully loaded in [link file://{CREATION}/{quote(name)} magenta italic]{name}[/]\n",style="success")
 
             case "4":
+                if not PRESETS:
+                    pause("There are no saved templates to remove")
+                    continue
+
+                show_presets(SAVING)
+
+                preset = questionary.autocomplete(
+                    "Enter the name of the template:",
+                    style = custom_style_fancy,
+                    choices=PRESETS,
+                    validate = validate_load
+                ).unsafe_ask()
+
+                remove_preset(SAVING, preset)
+                PRESETS.remove(preset)
+
+                console.print(f"Preset [magenta]{preset}[/] successfully removed\n", style="success")
+
+            case "5":
                 if not PRESETS:
                     pause("There are no saved templates to load")
                     continue
@@ -180,7 +200,7 @@ while True:
                 console.print(tree)
                 pause("")
             
-            case "5":
+            case "6":
                 clean_screen()
                 console.print(rainbow_text(ascii_art_text))
 
