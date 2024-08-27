@@ -30,19 +30,19 @@ Folder Grove features:
 <h2 align="center">🎥  Tool Showcase</h2>
 
 
-<h3 align="center">Option 1: Create a new Project</h3>
+<h3>Option 1: Create a new Project</h3>
 
 ![option1](https://github.com/purgemebaby/FolderGrovePy/blob/main/img/option%201.gif)
 
-<h3 align="center">Option 2: Save a Template</h3>
+<h3>Option 2: Save a Template</h3>
 
 ![option2](https://github.com/purgemebaby/FolderGrovePy/blob/main/img/option%202.gif)
 
-<h3 align="center">Option 3: Load a Template</h3>
+<h3>Option 3: Load a Template</h3>
 
 ![option3](https://github.com/purgemebaby/FolderGrovePy/blob/main/img/option%203.gif)
 
-<h3 align="center">Option 4: See Tree (Templates)</h3>
+<h3>Option 4: See Tree (Templates)</h3>
 
 ![option4](https://github.com/purgemebaby/FolderGrovePy/blob/main/img/option%204.gif)
 
