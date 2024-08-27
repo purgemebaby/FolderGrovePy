@@ -1,7 +1,5 @@
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/hUIms0C" data-context="false" ><a href="//imgur.com/a/hUIms0C"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
-
 <br>
-
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/hUIms0C"><a href="//imgur.com/hUIms0C">amador rivas</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 <div align="center">
     <img src="https://i.imgur.com/SMVjsy3.png" alt="logo" width="150" height="150px"/>
     <br>
