@@ -33,7 +33,7 @@ Folder Grove features:
 <div style="text-align: center;">
     <div>
         <h3>Option 1: Create a new Project</h3>
-        <img src="https://s10.gifyu.com/images/Sogxr.gif" alt="option 1" border="0">
+        <blockquote class="imgur-embed-pub" data-id="a/DimTudi"><a href="//imgur.com/DimTudi"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
     </div>
     <div>
         <h3>Option 2: Save a Template</h3>
@@ -41,7 +41,7 @@ Folder Grove features:
     </div>
     <div>
         <h3>Option 3: Load a Template</h3>
-        <img src="https://s10.gifyu.com/images/SogxY.gif" alt="option 3" border="0">
+        <blockquote class="imgur-embed-pub" lang="en" data-id="a/EPQTDMn" data-context="false" ><a href="//imgur.com/a/EPQTDMn"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
     </div>
     <div>
         <h3>Option 4: See Tree (Templates)</h3>
