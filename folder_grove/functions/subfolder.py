@@ -53,7 +53,7 @@ def subfolder(path, name, dir):
                 subfolder(path, name, new_dir)
 
 def new_preset(name_preset, saving):
-    """Saves preset to a file"""
+    """Saves template to a file"""
     result = []
     
     
@@ -91,11 +91,11 @@ def new_preset(name_preset, saving):
         
         for line in result:
             file.write(line + "\n")
-        file.write("-" * 20 + "\n")
+        file.write("\n")
         file.close()
 
 def load(save, create, name, preset):
-    """Creates folder and subfolders following preset pattern"""
+    """Creates folder and subfolders following template pattern"""
     size = len(preset)+1
     
     new_dir = f"{create}/{name}"
@@ -107,10 +107,22 @@ def load(save, create, name, preset):
                 new_line = new_dir + line[size:].strip()
                 os.makedirs(new_line, exist_ok=True)
         file.close()
+        
+
+def remove_preset(saving, preset):
+    """Removes template from file."""
+    
+    with open(saving, "r") as file:
+        lines = file.readlines()
+    
+    with open(saving, "w") as file:
+        for line in lines:
+            if not (line.startswith("#" + preset) or line.startswith("/" + preset)):
+                file.write(line)
 
 
 def saved_presets(saving):
-    """Gets saved presets from file and keeps them in heap memory"""
+    """Gets saved templates from file and keeps them in heap memory"""
     with open(saving, "r") as file:
         options = []
         for line in file:
@@ -120,9 +132,9 @@ def saved_presets(saving):
     return options
 
 def show_presets(saving):
-    """Shows saved presets in heap memory"""
+    """Shows saved templates in heap memory"""
     presets = saved_presets(saving)
-    console.print("Saved Presets:", style="bold #0f8994")
+    console.print("Saved Templates:", style="bold #0f8994")
     
     for p in presets:
         console.print(p, end="    ", style="bold #21dbc9")

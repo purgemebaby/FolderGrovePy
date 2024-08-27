@@ -11,7 +11,7 @@ from urllib.parse import quote
 
 clean_screen()
 
-DPATH = os.path.join(os.path.dirname(__file__), "config/presets.txt")
+DPATH = os.path.join(os.path.dirname(__file__), "config/template.txt")
 CONF = jsload(open(os.path.join(os.path.dirname(__file__), "config/config.json")))
 CREATION = CONF["creationPath"]
 SAVING = CONF["savingPath"]
@@ -28,7 +28,7 @@ except FileNotFoundError as e:
     console.print(e, style="error")
     CREATION = os.getcwd()
 
-# Getting presets file path
+# Getting templates file path
 try:
     if SAVING == "default":
         SAVING = DPATH
@@ -39,7 +39,7 @@ except FileNotFoundError as e:
     SAVING = DPATH
 
 if not os.path.exists(SAVING):
-    console.print("File 'presets.txt' does not exist. Creating file...", style="error")
+    console.print("File 'template.txt' does not exist. Creating file...", style="error")
     open(SAVING, "w").close()
 
 PROJECTS = get_subdirectories(CREATION)
@@ -61,31 +61,30 @@ def validate_folder_name(name):
     return True
 
 def validate_preset_name(preset):
-    """Parses the name of the preset and checks if it's valid"""
+    """Parses the name of the template and checks if it's valid"""
     if len(preset) <= 0: 
         return "Write a name"
     
     if preset in PRESETS:
-        return f"Preset '{preset}' already exists"
+        return f"Template '{preset}' already exists"
     
     return True
 
 def validate_load(preset):
-    """Parses the name of the preset to be loaded and checks if it exists"""
+    """Parses the name of the template to be loaded and checks if it exists"""
     if not preset in PRESETS:
-        return "Preset does not exist"
+        return "Template does not exist"
     
     return True
 
-# Menu
-# console.print(f"[bold white]{ascii_art_text}[/]")
+
 console.print(rainbow_text(ascii_art_text))
 
 menu_choices = [
 "1. Create a new Project",
-"2. Save a Preset",
-"3. Load a Preset",
-"4. See Tree (Presets)\n",
+"2. Save a Template",
+"3. Load a Template",
+"4. See Tree (Template)\n",
 "5. Clean Screen",
 "0. Exit"
 ]
@@ -111,7 +110,8 @@ while True:
                 ).unsafe_ask()
 
                 dir = f"{CREATION}/{name_project}"
-
+                
+                os.mkdir(dir)
                 subfolder(CREATION, name_project, dir)
                 PROJECTS.append(name_project)
 
@@ -119,7 +119,7 @@ while True:
 
             case "2":
                 name_preset = questionary.text(
-                    "Enter the name of the preset",
+                    "Enter the name of the template",
                     style = custom_style_fancy, 
                     instruction = "(Ctrl+c to cancel)\n> ",
                     validate = validate_preset_name
@@ -128,24 +128,24 @@ while True:
                 new_preset(name_preset, SAVING)
                 PRESETS.append(name_preset)
 
-                console.print(f"Preset [magenta]{name_preset}[/] saved successfully", style="success")
+                console.print(f"Template [magenta]{name_preset}[/] saved successfully", style="success")
 
             case "3":
                 if not PRESETS:
-                    pause("There are no saved presets to load")
+                    pause("There are no saved templates to load")
                     continue
 
                 show_presets(SAVING)
 
                 preset = questionary.autocomplete(
-                    "Enter the name of the preset:",
+                    "Enter the name of the template:",
                     style = custom_style_fancy,
                     choices=PRESETS,
                     validate = validate_load
                 ).unsafe_ask()
 
                 name = questionary.text(
-                    "Enter the name of the project (preset will be loaded here)",
+                    "Enter the name of the project (template will be loaded here)",
                     style = custom_style_fancy,
                     instruction = "(Ctrl+c to cancel)\n> ",
                     validate = validate_folder_name).unsafe_ask()
@@ -153,17 +153,17 @@ while True:
                 load(SAVING, CREATION, name, preset)
                 PROJECTS.append(name)
 
-                console.print(f"Preset [magenta]{preset}[/] successfully loaded in [link file://{CREATION}/{quote(name)} magenta italic]{name}[/].",style="success")
+                console.print(f"Template [magenta]{preset}[/] successfully loaded in [link file://{CREATION}/{quote(name)} magenta italic]{name}[/].",style="success")
 
             case "4":
                 if not PRESETS:
-                    pause("There are no saved presets to load")
+                    pause("There are no saved templates to load")
                     continue
 
                 show_presets(SAVING)
 
                 preset = questionary.autocomplete(
-                    "Enter the name of the preset:",
+                    "Enter the name of the template:",
                     style = custom_style_fancy,
                     choices=PRESETS,
                     validate = validate_load
