@@ -42,9 +42,15 @@ Folder Grove features:
 
 ![option3](https://github.com/purgemebaby/FolderGrovePy/blob/main/img/option%203.gif)
 
-<h3>Option 4: See Tree (Templates)</h3>
+<h3>Option 4: Remove a Template</h3>
 
 ![option4](https://github.com/purgemebaby/FolderGrovePy/blob/main/img/option%204.gif)
+
+<h3>Option 5: See Tree (Templates)</h3>
+
+![option4](https://github.com/purgemebaby/FolderGrovePy/blob/main/img/option%205.gif)
+
+
 
 <br>
 
