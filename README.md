@@ -1,6 +1,5 @@
 
 <div align="center">
-    <img src="https://i.imgur.com/SMVjsy3.png" alt="logo" width="150" height="150px"/>
     <br>
     <a href="https://www.python.org/">
         <img src="http://ForTheBadge.com/images/badges/made-with-python.svg" alt="forthebadge made-with-python"/>
